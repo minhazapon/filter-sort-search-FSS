@@ -1,26 +1,28 @@
 import DataTable from "react-data-table-component";
 import { Data } from "./Data";
+import { useState } from "react";
 
 
 const columns = [
 
     {
-        name: "TITLE",
+        name: "title",
         selector: row => row.title
 
     },
     {
-        name: "DIRECTOR",
+        name: "director",
         selector: row => row.director
 
     },
     {
-        name: "YEAR",
-        selector: row => row.year
+        name: "year",
+        selector: row => row.year,
+        sortable: true
 
     },
     {
-        name: "ACTION",
+        name: "action",
         selector: row => row.action
 
     }
@@ -43,11 +45,29 @@ const customStyles = {
 
 
 
+
 const AllTableZ = () => {
+
+    const [record, setRecords] = useState(Data)
+
+    const handleChange = (e) =>{
+
+    let query = e.target.value 
+    const newRecord = Data.filter( item => item.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()))
+    setRecords(newRecord)
+
+    }
+
     return (
         <div className=" mt-10 mb-10 ml-16 mr-16 ">
 
-             <DataTable columns={columns} data={Data} customStyles={customStyles} ></DataTable>
+            <div className=" mb-5 flex justify-between items-center gap-32">
+              <p className=" text-2xl text-black ">ITEMLIST</p>
+              <input className=" h-[40px] w-full border-[1px] p-2 rounded-md "
+               type="search" name="search" onChange={handleChange} placeholder="search" id="" />
+            </div>
+
+             <DataTable columns={columns} data={record} customStyles={customStyles} pagination ></DataTable>
             
         </div>
     );
